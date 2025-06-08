@@ -21,4 +21,12 @@ model.add(layers.Flatten())
 model.add(layers.Dense(64, activation='relu'))
 model.add(layers.Dense(1))
 
+# model compilation
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+# model learning
+history = model.fit(train_images, train_labels, epochs=10, validation_data=(test_images, test_labels))
+
 
