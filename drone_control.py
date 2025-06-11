@@ -27,4 +27,21 @@ def preprocessing(frame):
 
   return frame_reshaped
 
+# Load the trained model
+model_filename = 'E:\AIDrone\converted_keras\keras_model.h5'
+model = keras.models.load_model(model_filename)
+
+# camera capture object, 0=built-in camera
+#capture = cv2.VideoCapture("http://192.168.137.142:8091/?action=stream")  # ipcam사용시 여기의 0을 바꿔주세요
+capture = cv2.VideoCapture(0)
+
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 160)
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 120)
+
+zerodrone = ZERODrone()
+ikey = IKeyEvent()
+zerodrone.Open("COM3")
+zerodrone.setOption(0)
+sleep(0.5)
+
 
