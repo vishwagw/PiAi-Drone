@@ -44,4 +44,41 @@ zerodrone.Open("COM3")
 zerodrone.setOption(0)
 sleep(0.5)
 
+while True:
+        ret, frame = capture.read()
+        frame_fliped = cv2.flip(frame, 1)
+
+        if cv2.waitKey(200) > 0:
+            break
+
+        preprocessed = preprocessing(frame_fliped)
+        prediction = model.predict(preprocessed)
+
+
+        # 학생들이 각자 만든 티쳐블 머신으로 수정한다.
+        if prediction[0,0] < prediction[0,1] and prediction[0,2] < prediction[0,1] and prediction[0,3] < prediction[0,1] and prediction[0,4] < prediction[0,1]:
+            cv2.putText(frame_fliped, 'takeoff', (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+            print("takeoff")
+            zerodrone.takeoff()
+
+        elif prediction[0,0] < prediction[0,2] and prediction[0,1] < prediction[0,2] and prediction[0,3] < prediction[0,2] and prediction[0,4] < prediction[0,2]: 
+            cv2.putText(frame_fliped, 'landing', (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+            print("landing")
+            zerodrone.landing()  
+
+        elif prediction[0,0] < prediction[0,3] and prediction[0,1] < prediction[0,3] and prediction[0,2] < prediction[0,3] and prediction[0,4] < prediction[0,3]:
+            cv2.putText(frame_fliped, 'Up', (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+            print("Up")
+            zerodrone.altitude(100)
+    
+        elif prediction[0,0] < prediction[0,4] and prediction[0,1] < prediction[0,4] and prediction[0,2] < prediction[0,4] and prediction[0,3] < prediction[0,4]:
+            cv2.putText(frame_fliped, 'down', (10, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0))
+            print("down")
+            zerodrone.landing()
+        
+        cv2.imshow("VideoFrame", frame_fliped)
+
+        zerodrone.landing()
+        capture.release()
+        cv2.destroyAllWindows()
 
