@@ -52,6 +52,14 @@ cap.release()
 video_orig.release()
 cv.destroyAllWindows()
 
+# Step 3: Label Images (Manual Step)
+# Manually label the saved images in the './data' directory using a tool like LabelImg.
+    
+# Step 4: Data Preprocessing
+image_paths = [os.path.join('./data', fname) for fname in os.listdir('./data') if fname.endswith('.jpg')]
+labels = []  # Assuming labels are collected after manual labeling
+images = []
+
 
 
 
