@@ -60,6 +60,19 @@ image_paths = [os.path.join('./data', fname) for fname in os.listdir('./data') i
 labels = []  # Assuming labels are collected after manual labeling
 images = []
 
+for image_path in image_paths:
+    image = cv.imread(image_path)
+    image = cv.resize(image, (150, 150))
+    images.append(image)
+    labels.append(0)  # Replace with actual label after manual labeling
+    
+images = np.array(images) / 255.0  # Normalize pixel values
+labels = np.array(labels)
+    
+# Split the data into training, validation, and testing sets
+X_train, X_temp, y_train, y_temp = train_test_split(images, labels, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+
 
 
 
