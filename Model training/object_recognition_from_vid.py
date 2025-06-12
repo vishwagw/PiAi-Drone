@@ -95,6 +95,19 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
+# Step 6: Train the Model
+model.fit(
+    X_train, y_train,
+    epochs=20,
+    validation_data=(X_val, y_val)
+    )
+    
+# Step 7: Evaluate the Model
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print(f'Test Accuracy: {test_acc}')
+    
+# Step 8: Save and Deploy the Model
+model.save('object_recognition_model.h5')
 
 
 
