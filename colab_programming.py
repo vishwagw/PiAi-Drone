@@ -19,3 +19,19 @@ for idx, class_name in enumerate(classes):
     images.append(img)
     labels.append(idx)
 
+# Preprocess the data. Normalize images and convert labels to one-hot encoding form.
+images = np.array(images) / 255.0
+labels = tf.keras.utils.to_categorical(labels)
+    
+# Design the model. This example uses the VGG16 model
+model = tf.keras.applications.VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+for layer in model.layers:
+  layer.trainable = False
+
+  x = tf.keras.layers.Flatten()(model.output)
+  x = tf.keras.layers.Dense(256, activation='relu')(x)
+  x = tf.keras.layers.Dropout(0.5)(x)
+  x = tf.keras.layers.Dense(len(classes), activation='softmax')(x)
+
+  model = tf.keras.models.Model(model.input, x)
