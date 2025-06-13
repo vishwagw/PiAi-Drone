@@ -35,3 +35,7 @@ for layer in model.layers:
   x = tf.keras.layers.Dense(len(classes), activation='softmax')(x)
 
   model = tf.keras.models.Model(model.input, x)
+
+# train the model.
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(images, labels, epochs=10, batch_size=32, validation_split=0.2)
