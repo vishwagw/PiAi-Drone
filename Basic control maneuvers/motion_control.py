@@ -58,3 +58,25 @@ degree = 1
 east = 0
 north = 0 
 
+#next function is for the location of the drone.
+# d- drone
+def get_location_metres(original_loc, dNorth, dEast):
+
+    earth_radius = 6378137.0 #Earth's radius is approximately 6,371 kilometers
+    #coordinating the offsets in radius
+    dlat = dNorth/earth_radius
+    dlong = dEast/(earth_radius*math.cos(math.pi*original_loc.lat/180))
+
+    #new position in decimal degrees
+    newlat = original_loc.lat + (dlat * 180/math.pi)
+    newlong = original_loc.lon + (dlong * 180/math.pi)
+
+    if type(original_loc) is LocationGlobal:
+        targetlocation = LocationGlobal(newlat, newlong, original_loc.alt)
+    elif type(original_loc) is LocationGlobalRelative:
+        targetlocation = LocationGlobalRelative(newlat, newlong, original_loc.alt)
+    else:
+        raise Exception("Invalid Location object passed")
+    
+    return targetlocation;
+
