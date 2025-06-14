@@ -80,3 +80,39 @@ def get_location_metres(original_loc, dNorth, dEast):
     
     return targetlocation;
 
+#function for getting the distance metres->
+def get_distance_metres(alocation1, alocation2):
+
+    dlat = alocation2.lat - alocation1.lat
+    dlong = alocation2.long - alocation1.long
+    return math.sqrt((dlat*dlat) + (dlong*dlong)) * 1.113195e5
+
+#goto function initializing. 
+def goto(dNorth, dEast, gotoFunction=V1drone.simple_goto):
+    currentLocation = V1drone.location.global_relative_frame
+    targetLocation = get_location_metres(currentLocation, dNorth, dEast)
+    targetDistance = get_distance_metres(currentLocation, targetLocation)
+
+#yaw control function
+def condition_yaw(heading, relative=False):
+
+    if relative:
+        is_relative = 1 #yaw relative to direction of travel
+    else:
+        is_relative = 0 #yaw is an absolute angle
+    #creating the CONDITION_YAW command using command_long_encode()
+    msg = V1drone.message_factory.command_long_encode(
+        0, 0, # target system, target component
+        mavutil.mavlink.MAV_CMD_CONDITION_YAW, #command
+        0, #confirmation
+        heading, #param 1, yaw in degrees
+        0, #param 2, yaw in degree/s
+        1, # param 3, direction -1 ccw, 1 cw
+        is_relative, # param 4, relative offset 1, absolute angle 0
+        0, 0, 0) # param 5 - 7 not used
+    #sending the command to the vehicle:
+    V1drone.send_mavlink(msg)
+
+northArray = []
+eastArray = []
+
